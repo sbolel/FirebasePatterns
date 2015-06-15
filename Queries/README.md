@@ -14,6 +14,7 @@ Find the companies _with_ `someKey`:
 var ref = new Firebase(fbUrl+'/someList').orderByChild("someKey").startAt(!null);
 ```
 
-**Remember to add `".indexOn": "someVariable"` to the rules.**
+Next Steps:
 
-Example [AngularJS factory](./src/keyExistsFactory.js).
+* See example [AngularJS factory](./src/keyExistsFactory.js).
+* __Remember to add `".indexOn": "someVariable"` to the rules.__
