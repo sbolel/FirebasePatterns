@@ -1,6 +1,6 @@
 # Firebase Patterns & Anti-Patterns
 
-Collection of [Firebase](firebase.com) examples, patterns, and anti-patterns from Sinan Bolel <sinanbolel@gmail.com>.
+Collection of [Firebase](firebase.com) examples, patterns, and anti-patterns.
 
 ## Contents
 
