@@ -4,7 +4,7 @@ userModule.factory('UserFactory', function($log, $q, $rootScope, $firebaseAuth, 
     var deferred = $q.defer();
     if(userAuth.uid){
       var userRef = new Firebase(FBURL+'/users/'+userAuth.provider+'/'+userAuth.uid);
-      userData = new UserFactory(userRef);
+      userData = new User(userRef);
       $log.debug("Current user:", userData.$id);
       userData.$updateUser();
       userData.$bindTo($rootScope, "userData").then(function() {
@@ -50,4 +50,5 @@ userModule.factory('User', function($rootScope, $firebaseAuth, $firebaseObject, 
       this.$destroy();
       this.$auth.$unauth();
     }
+  });
 });

@@ -120,14 +120,13 @@ userModule.controller('UserCtrl', function($log, $scope, $state, UserService) {
 ### 1.2. Factory [`user-factory.js`](./src/user-factory.js)
 
 ```js
-
-userModule.factory('User', function($log, $q, $rootScope, $firebaseAuth, $exceptionHandler, UserFactory, FBURL){
+userModule.factory('UserFactory', function($log, $q, $rootScope, $firebaseAuth, $exceptionHandler, User, FBURL){
   var userData;
   return function(userAuth){
     var deferred = $q.defer();
     if(userAuth.uid){
       var userRef = new Firebase(FBURL+'/users/'+userAuth.provider+'/'+userAuth.uid);
-      userData = new UserFactory(userRef);
+      userData = new User(userRef);
       $log.debug("Current user:", userData.$id);
       userData.$updateUser();
       userData.$bindTo($rootScope, "userData").then(function() {
@@ -142,7 +141,7 @@ userModule.factory('User', function($log, $q, $rootScope, $firebaseAuth, $except
   }
 });
 
-userModule.factory('UserFactory', function($rootScope, $firebaseAuth, $firebaseObject, $q, FBURL){
+userModule.factory('User', function($rootScope, $firebaseAuth, $firebaseObject, $q, FBURL){
   var ref = new Firebase(FBURL);
   return $firebaseObject.$extend({
     $$defaults: {
@@ -173,21 +172,14 @@ userModule.factory('UserFactory', function($rootScope, $firebaseAuth, $firebaseO
       this.$destroy();
       this.$auth.$unauth();
     }
-    // $authWithCustomToken("<CUSTOM_AUTH_TOKEN>").then(function(authData) {
-    //   $log.log("Logged in as:", authData.uid);
-    // }).catch(function(error) {
-    //   $log.error("Authentication failed:", error);
-    // });
   });
 });
-
 ```
 
 ### 1.3. Service [`user-service.js`](./src/user-service.js)
 
 ```js
-
-userModule.service('UserService', function($log, $rootScope, $firebaseAuth, $firebaseObject, $q, new Firebase(FBURL), UserFactory) {  
+userModule.service('UserService', function($log, $rootScope, $firebaseAuth, $firebaseObject, $q, FBURL, UserFactory) {  
   var self, auth, _authObj, currentUser, previousUser;
   _authObj = $firebaseAuth(new Firebase(FBURL));
   self = {
@@ -270,6 +262,5 @@ userModule.service('UserService', function($log, $rootScope, $firebaseAuth, $fir
   };
   return self;
 });
-
 ```
 

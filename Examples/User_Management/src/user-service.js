@@ -1,4 +1,4 @@
-userModule.service('UserService', function($log, $rootScope, $firebaseAuth, $firebaseObject, $q, new Firebase(FBURL), UserFactory) {  
+userModule.service('UserService', function($log, $rootScope, $firebaseAuth, $firebaseObject, $q, FBURL, UserFactory) {  
   var self, auth, _authObj, currentUser, previousUser;
   _authObj = $firebaseAuth(new Firebase(FBURL));
   self = {
