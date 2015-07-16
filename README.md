@@ -1,8 +1,8 @@
 # Firebase Patterns & Anti-Patterns
 
-Collection of [Firebase](firebase.com) examples, patterns, and anti-patterns.
+Collection of enjoyable [Firebase](firebase.com) examples, patterns, and anti-patterns.
 
-## Contents
+## Overview
 
 * __[AngularFire](/AngularFire)__
     - [Correct Usage of `$loaded()`](/AngularFire/$loaded_Correct_Usage.md)
@@ -14,3 +14,9 @@ Collection of [Firebase](firebase.com) examples, patterns, and anti-patterns.
     - Find objects for which a specific key exists
 * __[Example Code](/Examples)__
     - [User Management](/Examples/User_Management): AngularJS module for creating, logging in, logging out users of a Firebase instance.
+* __[Firebase Resources](/firebase-resources)__
+
+## Backlog
+
+* Make user management example a bower package.
+* Record StackOverflow [firebase] questions and answers.
