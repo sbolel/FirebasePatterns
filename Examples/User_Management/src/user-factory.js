@@ -1,10 +1,12 @@
-userModule.factory('UserFactory', function($log, $q, $rootScope, $firebaseAuth, $exceptionHandler, User, FBURL){
+var userModuleFactory = angular.module('myApp.user.factories',[]);
+
+userModuleFactory.factory('User',['$log', '$q', '$rootScope', 'UserFactory', 'FBURL', function($log, $q, $rootScope, UserFactory, FBURL){
   var userData;
   return function(userAuth){
     var deferred = $q.defer();
     if(userAuth.uid){
       var userRef = new Firebase(FBURL+'/users/'+userAuth.provider+'/'+userAuth.uid);
-      userData = new User(userRef);
+      userData = new UserFactory(userRef);
       $log.debug("Current user:", userData.$id);
       userData.$updateUser();
       userData.$bindTo($rootScope, "userData").then(function() {
@@ -17,9 +19,9 @@ userModule.factory('UserFactory', function($log, $q, $rootScope, $firebaseAuth, 
     }
     return deferred.promise;
   }
-});
+}]);
 
-userModule.factory('User', function($rootScope, $firebaseAuth, $firebaseObject, $q, FBURL){
+userModuleFactory.factory('UserFactory', ['$rootScope', '$firebaseAuth', '$firebaseObject', '$q', 'FBURL', function($rootScope, $firebaseAuth, $firebaseObject, $q, FBURL){
   var ref = new Firebase(FBURL);
   return $firebaseObject.$extend({
     $$defaults: {
@@ -51,4 +53,4 @@ userModule.factory('User', function($rootScope, $firebaseAuth, $firebaseObject, 
       this.$auth.$unauth();
     }
   });
-});
+}]);

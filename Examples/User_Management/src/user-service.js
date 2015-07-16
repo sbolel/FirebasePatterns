@@ -1,20 +1,26 @@
-userModule.service('UserService', function($log, $rootScope, $firebaseAuth, $firebaseObject, $q, FBURL, UserFactory) {  
-  var self, auth, _authObj, currentUser, previousUser;
-  _authObj = $firebaseAuth(new Firebase(FBURL));
+var userModuleService = angular.module('myApp.user.services',[]);
+
+userModuleService.service('UserService',['$log', '$q', '$firebaseAuth', 'FBURL', 'User', 'AUTO_ANON', function($log, $q, $firebaseAuth, FBURL, User, AUTO_ANON) {  
+
+  var self, auth, _authObj, currentUser, previousUser, firebaseRef;
+  firebaseRef = new Firebase(FBURL);
+  _authObj = $firebaseAuth(firebaseRef);
   self = {
     init: function(successCb, errorCb) {
       if (_authObj.$getAuth()) {
-        UserFactory(_authObj.$getAuth()).then(function(userData){
+        User(_authObj.$getAuth()).then(function(userData){
           currentUser = userData;
           $log.debug("User loaded", currentUser);
         });
       } else {
-        self.loginAnonymously().then(function(authData){
-          UserFactory(authData).then(function(userData){
-            currentUser = userData;
-            $log.debug("User loaded", currentUser);
+        if(AUTO_ANON === true) {
+          self.loginAnonymously().then(function(authData){
+            User(authData).then(function(userData){
+              currentUser = userData;
+              $log.debug("User loaded", currentUser);
+            });
           });
-        });
+        }
       }
     },
     requireAuth: function () {
@@ -23,14 +29,13 @@ userModule.service('UserService', function($log, $rootScope, $firebaseAuth, $fir
     getRef: function() {
       return currentUser.$ref();
     },
-    createUser: function(user, successCb, errorCb){
+    createAndLoginUserWithPassword: function(user, successCb, errorCb){
       self.logout();
       _authObj.$createUser({
         email: user.email,
         password: user.password
       }).then(function(userData) {
         $log.debug("Created user:" + userData.uid);
-        // [TODO] Use loginWithPassword here.
         return _authObj.$authWithPassword({
           email: user.email,
           password: user.password
@@ -49,7 +54,6 @@ userModule.service('UserService', function($log, $rootScope, $firebaseAuth, $fir
         password: user.password
       }).then(function(authData) {
         $log.debug("User", authData.uid, "logged in.");
-        // [TODO] Use onAuth listener to avoid having to call init();
         self.init();
         if(successCb) successCb();
       }).catch(function(error) {
@@ -80,4 +84,4 @@ userModule.service('UserService', function($log, $rootScope, $firebaseAuth, $fir
     }
   };
   return self;
-});
+}]);
